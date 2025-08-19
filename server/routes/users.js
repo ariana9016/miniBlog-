@@ -1,7 +1,8 @@
 const express = require('express');
 const { body } = require('express-validator');
 const { protect, authorize } = require('../middleware/auth');
-const { getMyProfile, updateMyProfile, deleteMyAccount, getPublicProfile, listUsers, adminUpdateUser, adminDeleteUser, getMyPosts } = require('../controllers/usersController');
+const { getMyProfile, updateMyProfile, deleteMyAccount, getPublicProfile, listUsers, adminUpdateUser, adminDeleteUser, getMyPosts, getSuggestedUsers } = require('../controllers/usersController');
+const { getFollowing } = require('../controllers/followController');
 
 const router = express.Router();
 
@@ -15,7 +16,9 @@ router.put('/profile', protect, [
 router.delete('/profile', protect, deleteMyAccount);
 router.get('/me/posts', protect, getMyPosts);
 
+router.get('/suggestions', protect, getSuggestedUsers);
 router.get('/:id', getPublicProfile);
+router.get('/:userId/following', protect, getFollowing);
 
 // Admin routes
 router.get('/', protect, authorize('admin'), listUsers);
