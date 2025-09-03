@@ -92,7 +92,7 @@ const getAllUsers = async (req, res, next) => {
 const toggleUserBan = async (req, res, next) => {
   try {
     const { userId } = req.params;
-    const { reason } = req.body;
+    const { reason = '' } = req.body;
 
     const user = await User.findById(userId);
     if (!user) {
@@ -111,8 +111,14 @@ const toggleUserBan = async (req, res, next) => {
 
     user.isBanned = !user.isBanned;
     if (user.isBanned) {
-      user.banReason = reason;
+      user.banReason = reason || 'No reason provided';
       user.banDate = new Date();
+      
+      // Delete all posts by the banned user from database
+      await Post.deleteMany({ author: userId });
+      
+      // Delete all comments by the banned user
+      await Comment.deleteMany({ author: userId });
     } else {
       user.banReason = undefined;
       user.banDate = undefined;
@@ -136,7 +142,7 @@ const toggleUserBan = async (req, res, next) => {
 const deletePostAdmin = async (req, res, next) => {
   try {
     const { postId } = req.params;
-    const { reason } = req.body;
+    const { reason = '' } = req.body; // Make reason optional
 
     const post = await Post.findById(postId);
     if (!post) {
@@ -149,7 +155,7 @@ const deletePostAdmin = async (req, res, next) => {
     // Mark as moderated before deletion
     post.isModerated = true;
     post.moderatedBy = req.user.id;
-    post.moderationReason = reason;
+    post.moderationReason = reason || 'No reason provided';
     await post.save();
 
     // Delete the post
