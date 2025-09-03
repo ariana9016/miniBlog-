@@ -1,25 +1,27 @@
 import React, { useEffect, useContext } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-import Navbar from './components/Navbar';
+import Navbar from './components/layout/Navbar';
 import Home from './pages/Home';
-import BlogList from './pages/BlogList';
-import BlogDetail from './pages/BlogDetail';
+import BlogList from './pages/post/BlogList';
+import BlogDetail from './pages/post/BlogDetail';
 import Events from './pages/Events';
 import EventDetail from './pages/EventDetail';
 import CreateEvent from './pages/CreateEvent';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import UserDashboard from './pages/UserDashboard';
-import AdminDashboard from './pages/AdminDashboard';
-import Drafts from './pages/Drafts';
-import Bookmarks from './pages/Bookmarks';
+import Login from './pages/auth/Login';
+import Register from './pages/auth/Register';
+import UserDashboard from './pages/user/UserDashboard';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import Drafts from './pages/post/Drafts';
+import Bookmarks from './pages/post/Bookmarks';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import { DraftsProvider } from './context/DraftsContext';
 import { ToastProvider } from './context/ToastContext';
-import ForgotPassword from './pages/ForgotPassword';
-import ResetPassword from './pages/ResetPassword';
-import Profile from './pages/Profile';
-import UserPublicProfile from './pages/UserPublicProfile';
+import ForgotPassword from './pages/auth/ForgotPassword';
+import ResetPassword from './pages/auth/ResetPassword';
+import Profile from './pages/user/Profile';
+import UserPublicProfile from './pages/user/UserPublicProfile';
+import FriendsPage from './pages/user/FriendsPage';
+import MessagingPage from './pages/message/MessagingPage';
 import './App.css';
 
 const ProtectedRoute = ({ children, roles }) => {
@@ -103,6 +105,22 @@ const AppRoutes = () => {
             element={
               <ProtectedRoute roles={["user", "admin"]}>
                 <Bookmarks />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/friends"
+            element={
+              <ProtectedRoute roles={["user", "admin"]}>
+                <FriendsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/messages"
+            element={
+              <ProtectedRoute roles={["user", "admin"]}>
+                <MessagingPage />
               </ProtectedRoute>
             }
           />
