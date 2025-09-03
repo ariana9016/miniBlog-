@@ -13,6 +13,8 @@ const {
   reSharePost,
   incrementShareCount,
   getPersonalizedFeed,
+  getFriendsFeed,
+  getMyPosts,
   getPostLikes
 } = require('../controllers/postsController');
 const {
@@ -40,6 +42,8 @@ const postValidation = [
 // Special routes (must come before /:id routes)
 router.get('/drafts', protect, getDrafts);
 router.get('/feed', protect, getPersonalizedFeed);
+router.get('/friends-feed', protect, getFriendsFeed);
+router.get('/my-posts', protect, getMyPosts);
 
 router.route('/')
   .get(getPosts)

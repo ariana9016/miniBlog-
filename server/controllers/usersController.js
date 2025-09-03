@@ -88,38 +88,11 @@ const getPublicProfile = async (req, res, next) => {
   }
 };
 
-// @desc    Get suggested users to follow
-// @route   GET /api/users/suggestions
-// @access  Private
-const getSuggestedUsers = async (req, res, next) => {
-  try {
-    const user = await User.findById(req.user.id).select('following');
-    
-    // Find users that the current user is not following
-    const suggestions = await User.find({
-      _id: { 
-        $ne: req.user.id, // Not the current user
-        $nin: user.following || [] // Not already followed
-      }
-    })
-    .select('name username avatarUrl')
-    .limit(5);
-
-    res.status(200).json({
-      success: true,
-      users: suggestions
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
 module.exports = {
   getMyProfile,
   updateMyProfile,
   deleteMyAccount,
-  getPublicProfile,
-  getSuggestedUsers
+  getPublicProfile
 };
 
 // Admin controllers

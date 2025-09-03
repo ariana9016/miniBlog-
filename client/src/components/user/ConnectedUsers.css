@@ -1,0 +1,179 @@
+.connected-users {
+  background: linear-gradient(135deg, #f0e6ff 0%, #e6f3ff 100%);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  border: 1px solid #e1e5f2;
+}
+
+.connected-users h3 {
+  color: #2d3748;
+  margin-bottom: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.connected-users h3::before {
+  content: "👥";
+  font-size: 18px;
+}
+
+.following-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.following-card {
+  background: white;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.following-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e2e8f0;
+}
+
+.user-details h4 {
+  margin: 0 0 2px 0;
+  color: #2d3748;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.username {
+  color: #718096;
+  font-size: 11px;
+  margin: 0;
+}
+
+.user-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.message-btn, .unfollow-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.message-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.message-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
+}
+
+.unfollow-btn {
+  background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+  color: white;
+}
+
+.unfollow-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 6px rgba(245, 101, 101, 0.3);
+}
+
+.view-more-following {
+  text-align: center;
+  padding: 6px;
+  color: #718096;
+  font-size: 11px;
+  font-style: italic;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 6px;
+  border: 1px dashed #e2e8f0;
+}
+
+.loading, .no-following {
+  text-align: center;
+  color: #718096;
+  padding: 16px;
+  font-style: italic;
+  font-size: 12px;
+}
+
+/* Custom scrollbar for following list */
+.following-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.following-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 2px;
+}
+
+.following-list::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 2px;
+}
+
+.following-list::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .connected-users {
+    padding: 12px;
+  }
+  
+  .following-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .user-info {
+    width: 100%;
+  }
+  
+  .user-actions {
+    width: 100%;
+    justify-content: center;
+    gap: 12px;
+  }
+  
+  .message-btn, .unfollow-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+}

@@ -43,4 +43,25 @@
   color: #fff;
 }
 
+.btn--message {
+  background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 50%;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+
+.btn--message:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(66, 153, 225, 0.3);
+}
+
 

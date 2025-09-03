@@ -1,0 +1,191 @@
+.followers-section {
+  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  border: 1px solid #e2e8f0;
+}
+
+.followers-section h4 {
+  color: #2d3748;
+  margin-bottom: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.followers-section h4::before {
+  content: "👥";
+  font-size: 18px;
+}
+
+.welcome-message {
+  background: linear-gradient(135deg, #e6fffa 0%, #f0fff4 100%);
+  border: 1px solid #48bb78;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.welcome-message p {
+  margin: 0;
+  font-size: 12px;
+  color: #2d3748;
+  flex: 1;
+}
+
+.dismiss-btn {
+  background: #48bb78;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.dismiss-btn:hover {
+  background: #38a169;
+}
+
+.followers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.follower-item {
+  background: white;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.follower-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.follower-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.follower-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e2e8f0;
+}
+
+.follower-details h5 {
+  margin: 0 0 2px 0;
+  color: #2d3748;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.follower-details .username {
+  color: #718096;
+  font-size: 11px;
+  margin: 0;
+}
+
+.follower-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.message-btn, .unfollow-btn {
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.message-btn {
+  background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+}
+
+.message-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 6px rgba(66, 153, 225, 0.3);
+}
+
+.unfollow-btn {
+  background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+  color: white;
+}
+
+.unfollow-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 6px rgba(245, 101, 101, 0.3);
+}
+
+.view-more {
+  text-align: center;
+  padding: 6px;
+  color: #718096;
+  font-size: 11px;
+  font-style: italic;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 6px;
+  border: 1px dashed #e2e8f0;
+}
+
+.loading, .error, .empty-state {
+  text-align: center;
+  color: #718096;
+  padding: 16px;
+  font-style: italic;
+  font-size: 12px;
+}
+
+.error {
+  color: #e53e3e;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .followers-section {
+    padding: 12px;
+  }
+  
+  .follower-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .follower-info {
+    width: 100%;
+  }
+  
+  .message-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+    align-self: center;
+  }
+}

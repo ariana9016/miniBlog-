@@ -46,8 +46,13 @@ const userSchema = new mongoose.Schema({
   // New fields for advanced features
   followers: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
   following: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
+  // Friends list (mutual connections)
+  friends: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
+  friendsCount: { type: Number, default: 0 },
   followersCount: { type: Number, default: 0 },
   followingCount: { type: Number, default: 0 },
+  // Pending follow requests sent to this user
+  pendingRequests: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
   bookmarkedPosts: [{ type: mongoose.Schema.ObjectId, ref: 'Post' }],
   isActive: { type: Boolean, default: true },
   isBanned: { type: Boolean, default: false },

@@ -72,6 +72,15 @@ const login = async (req, res, next) => {
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
 
+    // Check if user is banned
+    if (user.isBanned) {
+      return res.status(403).json({ 
+        success: false, 
+        message: 'Your account has been banned. Please contact support for assistance.',
+        banned: true
+      });
+    }
+
     // Check if password matches
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
@@ -118,6 +127,15 @@ const getMe = async (req, res, next) => {
     }
 
     const user = await User.findById(req.user.id);
+
+    // Check if user is banned
+    if (user && user.isBanned) {
+      return res.status(403).json({ 
+        success: false, 
+        message: 'Your account has been banned. Please contact support for assistance.',
+        banned: true
+      });
+    }
 
     res.status(200).json({
       success: true,

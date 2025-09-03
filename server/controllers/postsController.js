@@ -52,18 +52,25 @@ const getPosts = async (req, res, next) => {
       .sort(sortOptions)
       .limit(limit * 1)
       .skip((page - 1) * limit)
-      .populate('author', 'name avatarUrl role')
+      .populate({
+        path: 'author',
+        select: 'name avatarUrl role isBanned',
+        match: { isBanned: { $ne: true } }
+      })
       .populate('originalPost', 'title author createdAt');
+
+    // Filter out posts where author is null (banned users)
+    const filteredPosts = posts.filter(post => post.author !== null);
 
     const total = await Post.countDocuments(query);
 
     res.status(200).json({
       success: true,
-      count: posts.length,
+      count: filteredPosts.length,
       total,
       page: parseInt(page),
       pages: Math.ceil(total / limit),
-      data: posts
+      data: filteredPosts
     });
   } catch (error) {
     next(error);
@@ -396,35 +403,122 @@ const incrementShareCount = async (req, res, next) => {
   }
 };
 
-// @desc    Get personalized feed (posts from followed users)
+// @desc    Get newsfeed (posts from ALL users)
 // @route   GET /api/posts/feed
 // @access  Private
 const getPersonalizedFeed = async (req, res, next) => {
   try {
-    const User = require('../models/User');
-    const user = await User.findById(req.user.id).select('following');
-    
     const { page = 1, limit = 10 } = req.query;
 
+    // Fetch all posts from all users, sorted by creation date (latest first)
     const posts = await Post.find({
-      $or: [
-        { author: { $in: user.following } },
-        { author: req.user.id }
-      ],
       status: 'published'
     })
     .sort({ createdAt: -1 })
     .limit(limit * 1)
     .skip((page - 1) * limit)
-    .populate('author', 'name avatarUrl role')
+    .populate('author', 'name username avatarUrl role')
     .populate('originalPost', 'title author createdAt');
 
     const total = await Post.countDocuments({
-      $or: [
-        { author: { $in: user.following } },
-        { author: req.user.id }
-      ],
       status: 'published'
+    });
+
+    res.status(200).json({
+      success: true,
+      count: posts.length,
+      total,
+      page: parseInt(page),
+      pages: Math.ceil(total / limit),
+      data: posts
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get friends feed (posts from friends only)
+// @route   GET /api/posts/friends-feed
+// @access  Private
+const getFriendsFeed = async (req, res, next) => {
+  try {
+    const User = require('../models/User');
+    const user = await User.findById(req.user.id).select('friends');
+    
+    const { page = 1, limit = 10 } = req.query;
+
+    // Filter out invalid ObjectIds from friends array
+    const friends = user.friends || [];
+    const validFriends = friends.filter(id => id && mongoose.Types.ObjectId.isValid(id));
+
+    // If no valid friends, return empty feed
+    if (validFriends.length === 0) {
+      return res.status(200).json({
+        success: true,
+        count: 0,
+        total: 0,
+        page: parseInt(page),
+        pages: 0,
+        data: []
+      });
+    }
+
+    const posts = await Post.find({
+      author: { $in: validFriends },
+      status: 'published'
+    })
+    .sort({ createdAt: -1 })
+    .limit(limit * 1)
+    .skip((page - 1) * limit)
+    .populate('author', 'name username avatarUrl role')
+    .populate('originalPost', 'title author createdAt')
+    .populate('comments', 'content author createdAt')
+    .populate({
+      path: 'comments',
+      populate: {
+        path: 'author',
+        select: 'name username avatarUrl'
+      }
+    });
+
+    const total = await Post.countDocuments({
+      author: { $in: validFriends },
+      status: 'published'
+    });
+
+    res.status(200).json({
+      success: true,
+      count: posts.length,
+      total,
+      page: parseInt(page),
+      pages: Math.ceil(total / limit),
+      data: posts
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get user's own posts (for dashboard)
+// @route   GET /api/posts/my-posts
+// @access  Private
+const getMyPosts = async (req, res, next) => {
+  try {
+    const { page = 1, limit = 10, status = 'published' } = req.query;
+
+    const posts = await Post.find({
+      author: req.user.id,
+      status
+    })
+    .sort({ createdAt: -1 })
+    .limit(limit * 1)
+    .skip((page - 1) * limit)
+    .populate('author', 'name username avatarUrl role')
+    .populate('originalPost', 'title author createdAt');
+
+    const total = await Post.countDocuments({
+      author: req.user.id,
+      status
     });
 
     res.status(200).json({
@@ -476,5 +570,7 @@ module.exports = {
   reSharePost,
   incrementShareCount,
   getPersonalizedFeed,
+  getFriendsFeed,
+  getMyPosts,
   getPostLikes
 };

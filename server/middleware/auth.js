@@ -79,6 +79,15 @@ const protect = async (req, res, next) => {
       });
     }
 
+    // Check if user is banned
+    if (req.user.isBanned) {
+      return res.status(403).json({
+        success: false,
+        message: 'Your account has been banned. Please contact support for assistance.',
+        banned: true
+      });
+    }
+
     next();
   } catch (error) {
     return res.status(401).json({

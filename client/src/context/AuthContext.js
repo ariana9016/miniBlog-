@@ -11,8 +11,16 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await getMe();
       setUser(res.user);
-    } catch {
-      setUser(null);
+    } catch (error) {
+      if (error.response?.data?.banned) {
+        // Handle banned user case - force logout
+        alert(error.response.data.message);
+        setUser(null);
+        // Clear any stored tokens/cookies
+        await logoutApi().catch(() => {});
+      } else {
+        setUser(null);
+      }
     } finally {
       setLoading(false);
     }
@@ -21,9 +29,19 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => { loadUser(); }, [loadUser]);
 
   const login = async (payload) => {
-    const res = await loginApi(payload);
-    setUser(res.user);
-    return res.user;
+    try {
+      const res = await loginApi(payload);
+      setUser(res.user);
+      return res.user;
+    } catch (error) {
+      if (error.response?.data?.banned) {
+        // Handle banned user case
+        alert(error.response.data.message);
+        setUser(null);
+        throw error;
+      }
+      throw error;
+    }
   };
 
   const register = async (payload) => {

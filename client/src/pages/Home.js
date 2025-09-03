@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
-import PostCard from '../components/PostCard';
-import LeftSidebar from '../components/LeftSidebar';
-import RightSidebar from '../components/RightSidebar';
+import PostCard from '../components/post/PostCard';
+import LeftSidebar from '../components/layout/LeftSidebar';
+import RightSidebar from '../components/layout/RightSidebar';
 import { AuthContext } from '../context/AuthContext';
 import { DraftsContext } from '../context/DraftsContext';
 import '../styles/Home.css';
@@ -140,7 +140,8 @@ const Home = () => {
         return;
       }
       try {
-        const response = await fetch('/api/posts/feed?limit=10', {
+        // Fetch all users' posts when user logs in
+        const response = await fetch('/api/posts?limit=50&sortBy=latest', {
           credentials: 'include'
         });
         const data = await response.json();
